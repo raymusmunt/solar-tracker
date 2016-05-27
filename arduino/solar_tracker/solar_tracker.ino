@@ -59,7 +59,7 @@ ISR(WDT_vect)
 
 #define LEFT_FUDGE 0 // LeftSensor adjustment e.g. '0.11' adds 11%
 #define TOTAL_FUDGE 5 // Add some slop to the motor centered figure.
-#define NIGHT_VALUE 45
+#define NIGHT_VALUE 35
 
 #define SLEEP_TIME 15 // 15 = 2min (8s * 15)
 
