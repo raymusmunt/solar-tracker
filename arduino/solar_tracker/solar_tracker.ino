@@ -14,12 +14,12 @@
 #include <avr/wdt.h>
 
 /*        D E B U G       */
-#define DEBUG // comment this to disable serial debug
+//#define DEBUG // comment this to disable serial debug
 
 #ifdef DEBUG
   #include <SoftwareSerial.h>
   SoftwareSerial mySerial(4, 5);
-  
+
   #define DEBUG_BEGIN(x) mySerial.begin(x)
   #define DEBUG_PRINT(x)     mySerial.print (x)
   #define DEBUG_PRINTLN(x)  mySerial.println (x)
@@ -51,10 +51,10 @@ ISR(WDT_vect)
 #define SWITCH_OPEN 8
 #define SWITCH_CLOSE 7
 
-#define LEFT_FUDGE 0.11 // Hardware requires +11% adjustment.
-#define TOTAL_FUDGE 20 // Don't engage the motor so often.
+#define LEFT_FUDGE 0 // Hardware requires +1% adjustment.
+#define TOTAL_FUDGE 5 // Don't engage the motor so often.
 
-#define NIGHT_VALUE 50
+#define NIGHT_VALUE 35
 
 #define SLEEP_TIME 15 // 2700 = 6 hours (8s * 2700 loops)
 
@@ -123,9 +123,12 @@ void loop() {
       readLDRs();
 
       if (ldrRight >= ldrLeft - TOTAL_FUDGE && ldrRight <= ldrLeft + TOTAL_FUDGE) {
+        DEBUG_PRINTLN("Im in the sweet spot ... Stopping");
         stopMotor();
+        currentState = MAIN;
+        break;
       }
-      else if ( ldrRight > ldrLeft + TOTAL_FUDGE ) {
+      if ( ldrRight > ldrLeft) {
         if ( !digitalRead(SWITCH_OPEN) ) {
           DEBUG_PRINTLN("Hit Open End Stop ... Stopping");
           stopMotor();
@@ -134,7 +137,8 @@ void loop() {
         }
         goRight();
       }
-      else if ( ldrRight < ldrLeft - TOTAL_FUDGE ) {
+      else if ( ldrRight < ldrLeft ) {
+      
         if ( !digitalRead(SWITCH_CLOSE) ) {
           DEBUG_PRINTLN("Hit Closed End Stop ... Stopping");
           stopMotor();
@@ -154,6 +158,7 @@ void loop() {
     case GO_HOME:
       DEBUG_PRINTLN("State Machine - GO_HOME");
       if (!digitalRead(SWITCH_CLOSE)) {
+        DEBUG_PRINTLN("Hit end stop in ogo home mode .. going to sleep");
         stopMotor();
         currentState = SLEEP;
         break;
@@ -209,6 +214,7 @@ void readLDRs () {
   DEBUG_PRINT(ldrLeftFudge);
   DEBUG_PRINT(" LDR RIGHT : ");
   DEBUG_PRINTLN(ldrRight);
+  
 }
 
 bool isDaytime()
