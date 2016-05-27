@@ -8,9 +8,10 @@ A solar tracking system using a barndoor mechanism with a Arduino microcontrolle
 - Omron switch endstops
 - LDR mount
 
-Frame made with wood, attached to pole using satellite dish mounting brackets.
+Frame made with wood, attached to satellite mount with pole clamps.
+Adjustable Solar Panel fixture made from aluminium cornering.
 
-Worm gearing made with m10 threaded rod and bolt.
+Worm gearing made with m10 threaded rod and nuts.
 Motor Hinge and Captive bolt hinge also using threaded rod and bolts.
 
 **Electronics**
@@ -21,4 +22,4 @@ Motor Hinge and Captive bolt hinge also using threaded rod and bolts.
 - x4 Diodes (not needed if using LM293D)
 - 12V DC Motor
 
-Big thanks to all the folks at #arduino for the help and encouragement!
+Big thanks to all the folks at #Arduino for the help and encouragement!
