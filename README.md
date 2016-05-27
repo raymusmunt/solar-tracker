@@ -1,5 +1,5 @@
 # Solar Tracker
-A solar tracking sytem using a barndoor mechanism with a Arduino microcontroller
+A solar tracking system using a barndoor mechanism with a Arduino microcontroller
 
 **All 3D printable items can be found in the sketchup document**
 - Brain Housing
@@ -8,7 +8,7 @@ A solar tracking sytem using a barndoor mechanism with a Arduino microcontroller
 - Omron switch endstops
 - LDR mount
 
-Frame made with wood, attached to pole using satilite dish mounting brackets.
+Frame made with wood, attached to pole using satellite dish mounting brackets.
 
 Worm gearing made with m10 threaded rod and bolt.
 Motor Hinge and Captive bolt hinge also using threaded rod and bolts.
