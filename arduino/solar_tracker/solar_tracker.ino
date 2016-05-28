@@ -57,9 +57,10 @@ ISR(WDT_vect)
 #define SWITCH_OPEN 8
 #define SWITCH_CLOSE 7
 
-#define LEFT_FUDGE 0 // LeftSensor adjustment e.g. '0.11' adds 11%
+#define LEFT_FUDGE 0.015 // LeftSensor adjustment e.g. '0.11' adds 11%
 #define TOTAL_FUDGE 2 // Add some slop to the motor centered figure.
-#define NIGHT_VALUE 100
+
+#define NIGHT_VALUE 720
 
 #define SLEEP_TIME 15 // 15 = 2min (8s * 15)
 
@@ -90,7 +91,6 @@ void setup() {
 
   pinMode(SWITCH_OPEN, INPUT);
   pinMode(SWITCH_CLOSE, INPUT);
-
 }
 
 ///////////////
@@ -105,7 +105,7 @@ void loop() {
 
     /**
        [MAIN]
-       Determines which state to enter based on ambient light
+        Determines which state to enter based on ambient light
     */
     case MAIN:
       DEBUG_PRINTLN("State: MAIN");
@@ -119,8 +119,8 @@ void loop() {
 
     /**
        [TRACK]
-       Looks for the sun and controls the motor allowing TOTAL_FUDGE slack
-       in readings. Stops motor on contact with corresponding end stop.
+        Looks for the sun and controls the motor allowing TOTAL_FUDGE slack
+        in readings. Stops motor on contact with corresponding end stop.
     */
     case TRACK:
       DEBUG_PRINTLN("State: TRACK");
@@ -133,6 +133,7 @@ void loop() {
         currentState = MAIN;
         break;
       }
+      
       if ( ldrRight > ldrLeft) {
         if ( !digitalRead(SWITCH_OPEN) ) {
           DEBUG_PRINTLN("Open End Stop");
@@ -142,8 +143,8 @@ void loop() {
         }
         goRight();
       }
+      
       else if ( ldrRight < ldrLeft ) {
-
         if ( !digitalRead(SWITCH_CLOSE) ) {
           DEBUG_PRINTLN("Closed End Stop");
           stopMotor();
@@ -158,8 +159,8 @@ void loop() {
 
     /**
        [GO_HOME]
-       Returns the panel to western configuration until
-       it hits the end stop and goes to sleep.
+        Returns the panel to western configuration until
+        it hits the end stop and goes to sleep.
     */
     case GO_HOME:
       DEBUG_PRINTLN("State: GO_HOME");
@@ -210,16 +211,18 @@ void readLDRs () {
   ldrLeft = analogRead(LDR_LEFT);
   ldrRight = analogRead(LDR_RIGHT);
 
+  DEBUG_PRINT("LDR L : ");
+  DEBUG_PRINT(ldrLeft);
+
   float ldrLeftFudge = ldrLeft * LEFT_FUDGE;  // Calculate LEFT_FUDGE%
   ldrLeft = ldrLeft + (int)ldrLeftFudge;
 
-  DEBUG_PRINT("LDR L : ");
+  DEBUG_PRINT(" LDR L FUDGED : ");
   DEBUG_PRINT(ldrLeft);
-  DEBUG_PRINT(" LDR L FUDGE: ");
+  DEBUG_PRINT(" FUDGEVAL: ");
   DEBUG_PRINT(ldrLeftFudge);
   DEBUG_PRINT(" LDR R: ");
   DEBUG_PRINTLN(ldrRight);
-
 }
 
 bool isDaytime()
@@ -229,7 +232,6 @@ bool isDaytime()
   if ( ldrLeft > NIGHT_VALUE || ldrRight > NIGHT_VALUE ) {
     return true;
   }
-
   return false;
 }
 
